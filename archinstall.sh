@@ -42,7 +42,7 @@ swapon /mnt/swapfile
 
 pacstrap /mnt base linux linux-firmware
 genfstab -U /mnt >> /mnt/etc/fstab
-cp chroot.sh /mnt/usr/local/bin/chroot
+cp chroot.sh /mnt/usr/local/bin/chroot_setup
 cp usersetup.sh /mnt/usr/local/bin/user_setup
 blkid -s UUID -o value $partition > /mnt/root-uuid
-arch-chroot /mnt /usr/local/bin/chroot
+arch-chroot /mnt /usr/local/bin/chroot_setup

@@ -45,7 +45,7 @@ echo 'options root="$(cat /root-uuid)" rw' >> /boot/loader/entries/arch-fallback
 # Post-install
 pacman -S --noconfirm  --needed dosfstools exfatprogs exfat-utils ntfs-3g pipewire-pulse \
                                 networkmanager bluez bluez-utils man-db man-pages texinfo \
-                                neovim xf86-video-intel mesa xorg-xserver \
+                                neovim xf86-video-intel mesa xorg-server base-devel \
                                 xorg-xsetroot xorg-xinit xorg-xprop xdotool arandr \
                                 noto-fonts noto-fonts-emoji ttf-joypixels \
                                 noto-fonts-extra noto-fonts-cjk ttf-linux-libertine \
