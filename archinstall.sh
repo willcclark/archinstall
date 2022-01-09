@@ -11,7 +11,7 @@ echo "\
 
 loadkeys us
 
-sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
+sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 8/" /etc/pacman.conf
 
 reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 
