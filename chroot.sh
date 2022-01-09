@@ -21,15 +21,15 @@ echo "127.0.0.1       localhost" >> /etc/hosts
 echo "::1             localhost" >> /etc/hosts
 echo "127.0.1.1       $hostname.localdomain $hostname" >> /etc/hosts
 
-pacman -S --noconfirm networkmanager bluez bluez-utils
-systemctl enable NetworkManager bluetooth
-
 passwd
 
 pacman -S --noconfirm intel-ucode
 bootctl install
+
 echo "default  arch.conf" >> /boot/loader/loader.conf
+echo "console-mode max" >> /boot/loader/loader.conf
 echo "editor   no" >> /boot/loader/loader.conf
+
 echo "title   Arch Linux" >> /boot/loader/entries/arch.conf
 echo "linux   /vmlinuz-linux" >> /boot/loader/entries/arch.conf
 echo "initrd  /intel-ucode.img" >> /boot/loader/entries/arch.conf
@@ -43,11 +43,22 @@ echo "initrd  /initramfs-linux-fallback.img" >> /boot/loader/entries/arch-fallba
 echo 'options root="$(cat /root-uuid)" rw' >> /boot/loader/entries/arch-fallback.conf
 
 # Post-install
-pacman -S --noconfirm dosfstools exfatprogs exfat-utils ntfs-3g neovim man-db man-pages texinfo \
-                      xf86-video-intel mesa xorg-xserver xorg-xinit fish brightnessctl xdg-utils xdg-user-dirs \
-                      noto-fonts noto-fonts-emoji noto-fonts-extra noto-fonts-cjk ttf-linux-libertine \
-                      ttf-liberation libx11 libxinerama gnome-keyring polkit-gnome
-                      
+pacman -S --noconfirm  --needed dosfstools exfatprogs exfat-utils ntfs-3g pipewire-pulse \
+                                networkmanager bluez bluez-utils man-db man-pages texinfo \
+                                neovim xf86-video-intel mesa xorg-xserver \
+                                xorg-xsetroot xorg-xinit xorg-xprop xdotool arandr \
+                                noto-fonts noto-fonts-emoji ttf-joypixels \
+                                noto-fonts-extra noto-fonts-cjk ttf-linux-libertine \
+                                brightnessctl fish libnotify unzip zip xdg-utils \
+                                xdg-user-dirs ttf-liberation libx11 libxinerama \
+                                gnome-keyring polkit-gnome pipewire pipewire-pulse \
+                                git neovim arc-gtk-theme papirus-icon-theme \
+                                dunst sxiv mpv zathura zathura-pdf-mupdf unclutter \
+                                maim rsync slock pulsemixer
+
+systemctl enable NetworkManager bluetooth
+
+sed -i 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 sed -i 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 echo "Enter Username: "
 read username
