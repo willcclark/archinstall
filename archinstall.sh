@@ -11,18 +11,14 @@ echo "\
 
 loadkeys us
 
-sed -i 's/^#Para/Para/' /etc/pacman.conf
+sed -i "s/^#ParallelDownloads = 5$/ParallelDownloads = 15/" /etc/pacman.conf
 
-if timeout 10 ping archlinux.org
-else
-    echo "please connect to the internet"
-    exit
-fi
+reflector --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 
 timedatectl set-ntp true
 
 lsblk
-echo "Enter the drive: "
+echo "Select the drive for the install: "
 read drive
 cfdisk $drive 
 echo "Enter the linux partition: "
@@ -39,7 +35,7 @@ mkdir -p /mnt/boot
 mount $efipartition /mnt/boot
 
 #swap
-head -c 100MB /dev/zero >/mnt/swapfile
+head -c 3G /dev/zero >/mnt/swapfile
 chmod 600 /mnt/swapfile
 mkswap /mnt/swapfile
 swapon /mnt/swapfile
@@ -47,5 +43,6 @@ swapon /mnt/swapfile
 pacstrap /mnt base linux linux-firmware
 genfstab -U /mnt >> /mnt/etc/fstab
 cp chroot.sh /mnt/usr/local/bin/chroot
+cp usersetup.sh /mnt/usr/local/bin/user_setup
+blkid -s UUID -o value $partition > /mnt/root-uuid
 arch-chroot /mnt /usr/local/bin/chroot
-exit
