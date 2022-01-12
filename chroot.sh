@@ -21,6 +21,7 @@ echo "127.0.0.1       localhost" >> /etc/hosts
 echo "::1             localhost" >> /etc/hosts
 echo "127.0.1.1       $hostname.localdomain $hostname" >> /etc/hosts
 
+echo "Setting root password..."
 passwd
 
 pacman -S --noconfirm intel-ucode
@@ -34,13 +35,13 @@ echo "title   Arch Linux" >> /boot/loader/entries/arch.conf
 echo "linux   /vmlinuz-linux" >> /boot/loader/entries/arch.conf
 echo "initrd  /intel-ucode.img" >> /boot/loader/entries/arch.conf
 echo "initrd  /initramfs-linux.img" >> /boot/loader/entries/arch.conf
-echo 'options root="$(cat /root-uuid)" rw' >> /boot/loader/entries/arch.conf
+echo "options root=PARTUUID=$(cat /root-uuid) quiet rw" >> /boot/loader/entries/arch.conf
 
 echo "title   Arch Linux (fallback initramfs)" >> /boot/loader/entries/arch-fallback.conf
 echo "linux   /vmlinuz-linux" >> /boot/loader/entries/arch-fallback.conf
 echo "initrd  /intel-ucode.img" >> /boot/loader/entries/arch-fallback.conf
 echo "initrd  /initramfs-linux-fallback.img" >> /boot/loader/entries/arch-fallback.conf
-echo 'options root="$(cat /root-uuid)" rw' >> /boot/loader/entries/arch-fallback.conf
+echo "options root=$(cat /root-uuid) rw" >> /boot/loader/entries/arch-fallback.conf
 
 # Post-install
 pacman -S --noconfirm  --needed dosfstools exfatprogs exfat-utils ntfs-3g pipewire-pulse \
@@ -59,10 +60,8 @@ pacman -S --noconfirm  --needed dosfstools exfatprogs exfat-utils ntfs-3g pipewi
 systemctl enable NetworkManager bluetooth
 
 sed -i 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
-sed -i 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
 echo "Enter Username: "
 read username
 useradd -m -G wheel -s /bin/fish $username
 
-echo "Boot Loader installed. Continuing to post-installation steps"
-su $username -c user_setup
+echo "Boot Loader installed. Reboot and continue to post-installation steps"
